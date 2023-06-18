@@ -1,3 +1,3 @@
-module github.com/rudifa/goembed2
+module github.com/rudifa/goembed-demo
 
 go 1.20

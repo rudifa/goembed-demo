@@ -5,7 +5,7 @@ import (
 	"io/fs"
 	"log"
 
-	"github.com/rudifa/goembed2/pkg/embedded"
+	"github.com/rudifa/goembed-demo/pkg/embedded"
 )
 
 func main() {

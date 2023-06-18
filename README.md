@@ -18,7 +18,6 @@ _The best practice here is to create a package in parent level with go:embed var
 
 ## `embed` lessons learned
 
-
 ```
 // embedded.go
 
@@ -37,10 +36,10 @@ Above will embed the `dir1` and `dir2` in the `Dir12` variable, `dir3`in `Dir3` 
 
 Note: dirs are relative to the directory where the file doing the embedding is found. It is not possible to embed dirs or files from the parent directiories (patterns starting with `.` or `..` are not allowed.
 
-In the demo project `goembed2`, these dirs are, along with the file `embedded.go`, in the dir `pkg/embedded`.
+In the demo project `goembed-demo`, these dirs are, along with the file `embedded.go`, in the dir `pkg/embedded`.
 
 ```
-goembed2 % tree                                                                                                        [main L|✚1…2]
+goembed-demo % tree                                                                                                        [main L|✚1…2]
 .
 ├── pkg
 │   └── embedded
@@ -67,28 +66,27 @@ In `main.go` we import the package `embedded`...
 package main
 
 import (
-	"fmt"
-	"io/fs"
-	"log"
+    "fmt"
+    "io/fs"
+    "log"
 
-	"github.com/rudifa/goembed2/pkg/embedded"
+    "github.com/rudifa/goembed-demo/pkg/embedded"
 )
 
 func main() {
 ...
-	fmt.Println("Walk the embedded directory Dir12")
-	walkDir(embedded.Dir12)
+    fmt.Println("Walk the embedded directory Dir12")
+    walkDir(embedded.Dir12)
 
-	fmt.Println("Walk the embedded directory Dir3")
-	walkDir(embedded.Dir3)	
-	
-	fmt.Println("Walk the embedded directory ABC")
-	walkDir(embedded.ABC)
-... 
+    fmt.Println("Walk the embedded directory Dir3")
+    walkDir(embedded.Dir3)
+
+    fmt.Println("Walk the embedded directory ABC")
+    walkDir(embedded.ABC)
+...
 }
 
 ```
-
 
 Above `walkDir` calls produce this:
 
@@ -112,22 +110,22 @@ A/B/C d
 A/B/C/abra.txt
 ```
 
-... with 
+... with
 
 ```
 // walkDir walks the file system, possibly embedded and prints the file names
 func walkDir(fileSystem fs.FS) {
-	fs.WalkDir(fileSystem, ".", func(path string, d fs.DirEntry, err error) error {
-		if err != nil {
-			log.Fatal(err)
-		}
-		isDir := ""
-		if d.IsDir() {
-			isDir = " d"
-		}
-		fmt.Println(path + isDir)
-		return nil
-	})
+    fs.WalkDir(fileSystem, ".", func(path string, d fs.DirEntry, err error) error {
+        if err != nil {
+            log.Fatal(err)
+        }
+        isDir := ""
+        if d.IsDir() {
+            isDir = " d"
+        }
+        fmt.Println(path + isDir)
+        return nil
+    })
 }
 
 ```
@@ -135,21 +133,21 @@ func walkDir(fileSystem fs.FS) {
 Finally, we can read the contents of a file
 
 ```
-	// read the contents of the file dir3/file3.txt
+    // read the contents of the file dir3/file3.txt
 
-	file3, err := embedded.Dir3.ReadFile("dir3/hello3.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println("Contents of dir3/file3.txt:")
-	fmt.Println(string(file3))
-	
-	// read the contents of the file A/B/C/abra.txt
-	fileAbra, err := embedded.ABC.ReadFile("A/B/C/abra.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println("Contents of fileAbra:\n" + string(fileAbra))
+    file3, err := embedded.Dir3.ReadFile("dir3/hello3.txt")
+    if err != nil {
+        log.Fatal(err)
+    }
+    fmt.Println("Contents of dir3/file3.txt:")
+    fmt.Println(string(file3))
+
+    // read the contents of the file A/B/C/abra.txt
+    fileAbra, err := embedded.ABC.ReadFile("A/B/C/abra.txt")
+    if err != nil {
+        log.Fatal(err)
+    }
+    fmt.Println("Contents of fileAbra:\n" + string(fileAbra))
 ```
 
 which yields
