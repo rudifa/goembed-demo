@@ -13,3 +13,6 @@ var Dir3 embed.FS
 
 //go:embed A/B/C
 var ABC embed.FS
+
+//go:embed A/B/C/abra.txt
+var AbraTxt string

@@ -6,6 +6,7 @@ import (
 	"log"
 
 	"github.com/rudifa/goembed-demo/pkg/embedded"
+	"github.com/rudifa/goutil/pkg/files"
 )
 
 func main() {
@@ -96,7 +97,6 @@ func main() {
 		fmt.Println("  ", file.Name(), file.IsDir(), file.Type(), fi)
 	}
 
-
 	// List the files from dir ABC/A.
 	dir, err = embedded.ABC.ReadDir("A")
 	if err != nil {
@@ -107,7 +107,6 @@ func main() {
 		fi, _ := file.Info()
 		fmt.Println("  ", file.Name(), file.IsDir(), file.Type(), fi)
 	}
-
 
 	// List the files from dir ABC/A/B.
 	dir, err = embedded.ABC.ReadDir("A/B")
@@ -137,9 +136,20 @@ func main() {
 		log.Fatal(err)
 	}
 	fmt.Println("Contents of file A/B/C/abra.txt:\n" + string(fileAbra))
+
+	// ------------------------------------------------------------
+
+	// read the contents of the string AbraTxt
+	fmt.Println("Contents of string AbraTxt:\n" + embedded.AbraTxt)
+
+	// rewrite the file A/B/C/abra.txt from string AbraTxt
+	err = files.WriteToFile("pkg/embedded/A/B/C/abra.txt", embedded.AbraTxt)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
-// walkDir walks the file system, possibly embedded and prints the file names
+// walkDir walks the file system, possibly embedded, and prints the file names
 func walkDir(fileSystem fs.FS) {
 	fs.WalkDir(fileSystem, ".", func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
